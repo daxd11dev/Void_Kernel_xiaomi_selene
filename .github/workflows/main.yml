@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout kernel source
-        uses: actions/upload-artifact@v4
+        uses: actions/checkout-artifact@v4
         with:
           ref: Hydrogen
 
@@ -31,7 +31,7 @@ jobs:
           make -j$(nproc --all) O=out ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- 2>&1 | tee build.log
 
       - name: Upload kernel
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: VoidKernel-selene
           path: out/arch/arm64/boot/Image.gz-dtb
