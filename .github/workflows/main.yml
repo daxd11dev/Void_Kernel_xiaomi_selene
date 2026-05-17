@@ -1,0 +1,37 @@
+name: Build VoidKernel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout kernel source
+        uses: actions/checkout@v3
+        with:
+          ref: Hydrogen
+
+      - name: Setup build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bc bison flex libssl-dev libelf-dev
+
+      - name: Download Clang toolchain
+        run: |
+          mkdir clang
+          wget -q https://github.com/ZyCromerZ/Clang/releases/download/19.0.0git-20240624-release/Clang-19.0.0git-20240624.tar.gz
+          tar -xf Clang-*.tar.gz -C clang
+
+      - name: Build kernel
+        run: |
+          export PATH="$PWD/clang/bin:$PATH"
+          make O=out ARCH=arm64 selene_defconfig
+          make -j$(nproc --all) O=out ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- 2>&1 | tee build.log
+
+      - name: Upload kernel
+        uses: actions/upload-artifact@v3
+        with:
+          name: VoidKernel-selene
+          path: out/arch/arm64/boot/Image.gz-dtb
