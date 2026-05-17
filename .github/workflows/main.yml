@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout kernel source
-        uses: actions/checkout-artifact@v4
+        uses: actions/checkout@v4
         with:
           ref: Hydrogen
 
@@ -28,7 +28,7 @@ jobs:
         run: |
           export PATH="$PWD/clang/bin:$PATH"
           make O=out ARCH=arm64 selene_defconfig
-          make -j$(nproc --all) O=out ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- 2>&1 | tee build.log
+          make -j$(nproc --all) O=out ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
 
       - name: Upload kernel
         uses: actions/upload-artifact@v4
