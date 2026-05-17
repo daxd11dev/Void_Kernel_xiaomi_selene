@@ -16,8 +16,9 @@ jobs:
       - name: Setup build environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y bc bison flex libssl-dev libelf-dev gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi binutils-aarch64-linux-gnu
-
+          sudo apt-get install -y bc bison flex libssl-dev libelf-dev gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi binutils-aarch64-linux-gnu lld
+          sudo update-alternatives --install /usr/bin/ld ld /usr/bin/ld.lld 100
+          
       - name: Download Clang toolchain
         run: |
           mkdir clang
